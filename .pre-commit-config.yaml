@@ -1,0 +1,58 @@
+exclude: 'ci|docs'
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.3.0
+  hooks:
+  - id: check-added-large-files
+  - id: check-case-conflict
+  - id: check-docstring-first
+  - id: check-executables-have-shebangs
+  - id: check-json
+  - id: check-merge-conflict
+  - id: check-toml
+  - id: check-symlinks
+  - id: check-xml
+  - id: check-yaml
+    exclude: 'ci/templates/*'
+  - id: end-of-file-fixer
+  - id: fix-encoding-pragma
+  - id: mixed-line-ending
+  - id: requirements-txt-fixer
+  - id: trailing-whitespace
+- repo: http://github.com/pre-commit/pygrep-hooks
+  rev: v1.4.2
+  hooks:
+  - id: python-check-blanket-noqa
+  - id: python-use-type-annotations
+  - id: rst-backticks
+# - repo: https://github.com/pre-commit/mirrors-isort
+- repo: https://github.com/timothycrosley/isort
+  rev: 4.3.21-2
+  hooks:
+  - id: isort
+    additional_dependencies: [toml]
+- repo: https://github.com/psf/black
+  rev: 19.10b0
+  hooks:
+  - id: black
+    language: system
+# - repo: https://github.com/pycqa/pylint
+#   rev: pylint-2.4.4
+- repo: https://github.com/pre-commit/mirrors-pylint
+  rev: v2.4.4
+  hooks:
+  - id: pylint
+    language: system
+- repo: https://gitlab.com/pycqa/flake8
+  rev: 3.7.8
+  hooks:
+  - id: flake8
+    language: system
+# - repo: https://github.com/python/mypy
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v0.750
+  hooks:
+  - id: mypy
+    language: system
+default_language_version:
+  python: python3

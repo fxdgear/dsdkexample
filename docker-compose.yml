@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+
+  mongo:
+    image: mongo:4.0.17-xenial
+    stop_signal: SIGINT
+    command: [--noauth, --smallfiles, --quiet]
+    ports:
+    - "27018:27017"
+    restart: always
+    volumes:
+    - ./data/db:/data/db
+
+  example:
+    build: .
+    depends_on:
+    - mongo
+    volumes:
+    - ./local:/local:ro
+    - ./model:/model:ro
+    - ./secrets:/secrets:ro
+    working_dir: /tmp
+    entrypoint: ["dsdkexample"]  # see setup.py console_scripts
+
+  jupyter:
+    image: quay.io/pennsignals/alpine-3.8-python-3.7-jupyter:7.0
+    volumes:
+    - ./local:/local:ro
+    - ./model:/model:rw
+    - ./secrets:/secrets:ro
+    - ./:/tmp
+    working_dir: /tmp
+    expose:
+    - "8889"
+    ports:
+    - "8889:8889"
+    entrypoint: [/sbin/tini, --]
+    command: [jupyter, notebook, --notebook-dir=/tmp/notebooks,  --ip=0.0.0.0, --port=8889, --no-browser, --allow-root]
